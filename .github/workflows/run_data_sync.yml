@@ -40,21 +40,32 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          npm install -g pnpm
+          pnpm install
 
       - name: Sync Keep data
-        run: python run_page/keep_sync.py ${{ secrets.KEEP_PHONE_NUMBER }} ${{ secrets.KEEP_PASSWORD }} --with-gpx
+        run: python run_page/keep_sync.py ${{ secrets.KEEP_PHONE }} ${{ secrets.KEEP_PASSWORD }} --with-gpx
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate SVG
         run: python run_page/gen_svg.py
 
+      - name: Build
+        run: pnpm run build
+
       - name: Deploy to GitHub Pages
         if: env.BUILD_GH_PAGES == 'true'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./src
+          publish_dir: ./dist
           publish_branch: gh-pages
