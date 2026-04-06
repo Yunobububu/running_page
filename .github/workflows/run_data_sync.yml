@@ -72,7 +72,7 @@ jobs:
             --use-localtime
 
       - name: Build
-        run: pnpm run build
+        run: PATH_PREFIX=/running_page pnpm run build
 
       - name: Deploy to GitHub Pages
         if: env.BUILD_GH_PAGES == 'true'
