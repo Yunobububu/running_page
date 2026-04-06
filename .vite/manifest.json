@@ -1,6 +1,6 @@
 {
-  "_activities-Pxcn5ILN.js": {
-    "file": "assets/activities-Pxcn5ILN.js",
+  "_activities-CEKX6su8.js": {
+    "file": "assets/activities-CEKX6su8.js",
     "name": "activities"
   },
   "_vendors-S6yD6p_V.js": {
@@ -306,13 +306,13 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-DH7mMa8b.js",
+    "file": "assets/index-BDZj35z-.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_vendors-S6yD6p_V.js",
-      "_activities-Pxcn5ILN.js"
+      "_activities-CEKX6su8.js"
     ],
     "dynamicImports": [
       "src/static/run_countries.ts",
@@ -371,14 +371,14 @@
     ]
   },
   "src/static/run_countries.ts": {
-    "file": "assets/run_countries-CMJRSXAY.js",
+    "file": "assets/run_countries-BLRlHDiX.js",
     "name": "run_countries",
     "src": "src/static/run_countries.ts",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
       "_vendors-S6yD6p_V.js",
-      "_activities-Pxcn5ILN.js"
+      "_activities-CEKX6su8.js"
     ]
   }
 }
