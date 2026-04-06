@@ -3,16 +3,15 @@ name: Run Data Sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 1 * * *'
   push:
     branches:
       - master
 
 env:
-  RUN_TYPE: keep
-  ATHLETE: yunobububu
-  TITLE: Yunobububu Running
-  MIN_GRID_DISTANCE: 1
+  ATHLETE: lyuiii
+  TITLE: lyuiii Running
+  MIN_GRID_DISTANCE: 5
   TITLE_GRID: Running Records
   IGNORE_START_END_RANGE: 10
   IGNORE_RANGE: 10
@@ -21,7 +20,8 @@ env:
   BUILD_GH_PAGES: true
   SAVE_TO_PARQENT: false
   GENERATE_MONTH_OF_LIFE: false
-  BIRTHDAY_MONTH: 1990-01
+  BIRTHDAY_MONTH: 1989-03
+  USE_LOCAL_TIME: true
 
 jobs:
   sync:
@@ -51,13 +51,25 @@ jobs:
           npm install -g pnpm
           pnpm install
 
-      - name: Sync Keep data
-        run: python run_page/keep_sync.py ${{ secrets.KEEP_PHONE }} ${{ secrets.KEEP_PASSWORD }} --with-gpx
+      - name: Sync Strava data
+        run: python run_page/strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_REFRESH_TOKEN }} --only-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate SVG
-        run: python run_page/gen_svg.py
+        run: |
+          python run_page/gen_svg.py \
+            --title "${{ env.TITLE_GRID }}" \
+            --type grid \
+            --athlete "${{ env.ATHLETE }}" \
+            --output assets/grid.svg \
+            --min-distance ${{ env.MIN_GRID_DISTANCE }} \
+            --track-color blue \
+            --special-distance 10 \
+            --special-color yellow \
+            --special-distance2 20 \
+            --special-color2 red \
+            --use-localtime
 
       - name: Build
         run: pnpm run build
