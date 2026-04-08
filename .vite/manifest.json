@@ -1,6 +1,6 @@
 {
-  "_activities-PPSUHI0A.js": {
-    "file": "assets/activities-PPSUHI0A.js",
+  "_activities-BiN2nNFl.js": {
+    "file": "assets/activities-BiN2nNFl.js",
     "name": "activities"
   },
   "_vendors-DIUO_zUq.js": {
@@ -306,13 +306,13 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-BRvYBFH1.js",
+    "file": "assets/index-Bq4Vbzmb.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_vendors-DIUO_zUq.js",
-      "_activities-PPSUHI0A.js"
+      "_activities-BiN2nNFl.js"
     ],
     "dynamicImports": [
       "src/static/run_countries.ts",
@@ -371,14 +371,14 @@
     ]
   },
   "src/static/run_countries.ts": {
-    "file": "assets/run_countries-C72DKIPl.js",
+    "file": "assets/run_countries-CEaENC3R.js",
     "name": "run_countries",
     "src": "src/static/run_countries.ts",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
       "_vendors-DIUO_zUq.js",
-      "_activities-PPSUHI0A.js"
+      "_activities-BiN2nNFl.js"
     ]
   }
 }
