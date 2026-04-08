@@ -1,6 +1,6 @@
 {
-  "_activities-BiN2nNFl.js": {
-    "file": "assets/activities-BiN2nNFl.js",
+  "_activities-D4gfnIcN.js": {
+    "file": "assets/activities-D4gfnIcN.js",
     "name": "activities"
   },
   "_vendors-DIUO_zUq.js": {
@@ -306,13 +306,13 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-Bq4Vbzmb.js",
+    "file": "assets/index-jIVym5fm.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_vendors-DIUO_zUq.js",
-      "_activities-BiN2nNFl.js"
+      "_activities-D4gfnIcN.js"
     ],
     "dynamicImports": [
       "src/static/run_countries.ts",
@@ -371,14 +371,14 @@
     ]
   },
   "src/static/run_countries.ts": {
-    "file": "assets/run_countries-CEaENC3R.js",
+    "file": "assets/run_countries-D64ewdMY.js",
     "name": "run_countries",
     "src": "src/static/run_countries.ts",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
       "_vendors-DIUO_zUq.js",
-      "_activities-BiN2nNFl.js"
+      "_activities-D4gfnIcN.js"
     ]
   }
 }
