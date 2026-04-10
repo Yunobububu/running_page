@@ -1,6 +1,6 @@
 {
-  "_activities-51Dog4Zf.js": {
-    "file": "assets/activities-51Dog4Zf.js",
+  "_activities-DcBlq3_z.js": {
+    "file": "assets/activities-DcBlq3_z.js",
     "name": "activities"
   },
   "_vendors-DIUO_zUq.js": {
@@ -306,13 +306,13 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-2gfQ12LS.js",
+    "file": "assets/index-D1HO5bYE.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_vendors-DIUO_zUq.js",
-      "_activities-51Dog4Zf.js"
+      "_activities-DcBlq3_z.js"
     ],
     "dynamicImports": [
       "src/static/run_countries.ts",
@@ -371,14 +371,14 @@
     ]
   },
   "src/static/run_countries.ts": {
-    "file": "assets/run_countries-BCHgbqMn.js",
+    "file": "assets/run_countries-BFZveKMg.js",
     "name": "run_countries",
     "src": "src/static/run_countries.ts",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
       "_vendors-DIUO_zUq.js",
-      "_activities-51Dog4Zf.js"
+      "_activities-DcBlq3_z.js"
     ]
   }
 }
