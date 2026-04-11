@@ -4,30 +4,30 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 1 * * *'
+  # push 到 master 时触发（并发时只保留最新一次，避免循环触发）
   push:
     branches:
       - master
 
+# 只保留最新一次运行，避免 git push 触发循环
+concurrency:
+  group: run-data-sync
+  cancel-in-progress: true
+
 env:
   ATHLETE: lyuiii
   TITLE: lyuiii Running
-  MIN_GRID_DISTANCE: 5
   TITLE_GRID: Running Records
-  IGNORE_START_END_RANGE: 10
-  IGNORE_RANGE: 10
-  SAVE_DATA_IN_GITHUB_CACHE: false
-  DATA_CACHE_PREFIX: 'track_data'
-  BUILD_GH_PAGES: true
-  SAVE_TO_PARQENT: false
-  GENERATE_MONTH_OF_LIFE: false
-  BIRTHDAY_MONTH: 1989-03
-  USE_LOCAL_TIME: true
+  TITLE_GITHUB: lyuiii Running
+  MIN_GRID_DISTANCE: 5
 
 jobs:
   sync:
-    name: Sync
+    name: Sync & Generate SVGs
     runs-on: ubuntu-latest
-    
+    outputs:
+      commit_needed: ${{ steps.commit.outputs.commit_needed }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,23 +40,39 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          npm install -g pnpm
-          pnpm install
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
       - name: Sync Strava data
         run: python run_page/strava_sync.py ${{ secrets.STRAVA_CLIENT_ID }} ${{ secrets.STRAVA_CLIENT_SECRET }} ${{ secrets.STRAVA_REFRESH_TOKEN }} --only-run
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate SVG
+      # 修复数据库里损坏的 Interval 记录（run_id=1196979659: elapsed/moving_time 存成了整数而非字符串）
+      - name: Fix corrupted DB record
+        run: |
+          python3 - << 'EOF'
+          import sqlite3, sys
+          sys.path.insert(0, 'run_page')
+          from config import SQL_FILE
+          conn = sqlite3.connect(SQL_FILE)
+          cur = conn.cursor()
+          def secs_to_interval(secs):
+              h, rem = divmod(int(secs), 3600)
+              m, s = divmod(rem, 60)
+              return f"1970-01-01 {h:02d}:{m:02d}:{s:02d}.000000"
+          cur.execute("SELECT elapsed_time, moving_time FROM activities WHERE run_id=1196979659")
+          row = cur.fetchone()
+          if row and isinstance(row[0], int):
+              elapsed = secs_to_interval(row[0])
+              moving = secs_to_interval(row[1])
+              cur.execute("UPDATE activities SET elapsed_time=?, moving_time=? WHERE run_id=1196979659", (elapsed, moving))
+              conn.commit()
+              print(f"Fixed run_id=1196979659: elapsed={elapsed}, moving={moving}")
+          else:
+              print("Already fixed or record not found")
+          EOF
+
+      # 修复：生成 grid.svg（原来有用 --gpx-dir，现在改用 --from-db 避免路径问题）
+      - name: Generate grid.svg
         run: |
           python run_page/gen_svg.py \
             --title "${{ env.TITLE_GRID }}" \
@@ -69,15 +85,49 @@ jobs:
             --special-color yellow \
             --special-distance2 20 \
             --special-color2 red \
-            --use-localtime
+            --use-localtime \
+            --from-db
 
-      - name: Build
-        run: PATH_PREFIX=/running_page pnpm run build
+      # 修复：生成 github.svg（之前 workflow 里完全遗漏了这个！）
+      - name: Generate github.svg
+        run: |
+          python run_page/gen_svg.py \
+            --title "${{ env.TITLE_GITHUB }}" \
+            --type github \
+            --athlete "${{ env.ATHLETE }}" \
+            --special-distance 10 \
+            --special-distance2 20 \
+            --special-color yellow \
+            --special-color2 red \
+            --output assets/github.svg \
+            --use-localtime \
+            --min-distance 0.5 \
+            --from-db
 
-      - name: Deploy to GitHub Pages
-        if: env.BUILD_GH_PAGES == 'true'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
+      - name: Commit and push changes
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/github.svg assets/grid.svg src/static/activities.json run_page/data.db
+          if git diff --cached --quiet; then
+            echo "commit_needed=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit"
+          else
+            echo "commit_needed=true" >> $GITHUB_OUTPUT
+            git commit -m "feat: sync running data and regenerate SVGs $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            git push
+          fi
+
+  # 构建部署独立 job，等 push 完成后再跑（workflow_call 是同步的，会在 push 之前执行，故不能放在同一个 job）
+  build-and-deploy:
+    needs: sync
+    if: needs.sync.outputs.commit_needed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/gh-pages.yml
+    with:
+      save_data_in_github_cache: false
+      data_cache_prefix: track_data

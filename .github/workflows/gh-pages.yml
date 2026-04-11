@@ -12,14 +12,15 @@ on:
         required: true
         type: string
         default: track_data
+  # 被 run_data_sync.yml 通过 workflow_call 调用（无循环风险：workflow_call 不触发 push 事件）
   workflow_call:
     inputs:
       save_data_in_github_cache:
-        required: true
+        required: false
         type: boolean
         default: false
       data_cache_prefix:
-        required: true
+        required: false
         type: string
         default: track_data
 
