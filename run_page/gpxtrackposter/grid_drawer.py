@@ -53,19 +53,36 @@ class GridDrawer(TracksDrawer):
             )
 
     def _draw_track(self, dr: svgwrite.Drawing, tr: Track, size: XY, offset: XY):
-        color = self.color(self.poster.length_range, tr.length, tr.special)
-
         str_length = format_float(self.poster.m2u(tr.length))
-
         date_title = f"{str(tr.start_time_local)[:10]} {str_length}{self.poster.u()}"
+        tr_length = self.poster.m2u(tr.length)
+
+        distance1 = self.poster.special_distance.get("special_distance", 10.0)
+        distance2 = self.poster.special_distance.get("special_distance2", 20.0)
+        distance3 = self.poster.special_distance.get("special_distance3", 40.0)
+        distance4 = self.poster.special_distance.get("special_distance4", 80.0)
+
         for line in project(tr.bbox(), size, offset, tr.polylines):
-            distance1 = self.poster.special_distance["special_distance"]
-            distance2 = self.poster.special_distance["special_distance2"]
-            has_special = distance1 < self.poster.m2u(tr.length) < distance2
-            color = self.color(self.poster.length_range_by_date, tr.length, has_special)
-            if self.poster.m2u(tr.length) >= distance2:
-                color = self.poster.colors.get("special2") or self.poster.colors.get(
-                    "special"
+            if tr_length >= distance4:
+                color = self.poster.colors.get(
+                    "special4"
+                ) or self.poster.colors.get("special")
+            elif tr_length >= distance3:
+                color = self.poster.colors.get(
+                    "special3"
+                ) or self.poster.colors.get("special")
+            elif tr_length >= distance2:
+                color = self.poster.colors.get(
+                    "special2"
+                ) or self.poster.colors.get("special")
+            elif tr_length >= distance1:
+                has_special = True
+                color = self.color(
+                    self.poster.length_range_by_date, tr.length, has_special
+                )
+            else:
+                color = self.color(
+                    self.poster.length_range_by_date, tr.length, False
                 )
             polyline = dr.polyline(
                 points=line,

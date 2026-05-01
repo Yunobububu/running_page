@@ -133,6 +133,18 @@ def main():
         help="Secondary color of special tracks (default: none).",
     )
     args_parser.add_argument(
+        "--special-color3",
+        dest="special_color3",
+        metavar="COLOR",
+        help="Third tier special track color (default: none).",
+    )
+    args_parser.add_argument(
+        "--special-color4",
+        dest="special_color4",
+        metavar="COLOR",
+        help="Fourth tier special track color (default: none).",
+    )
+    args_parser.add_argument(
         "--units",
         dest="units",
         metavar="UNITS",
@@ -159,7 +171,23 @@ def main():
         metavar="DISTANCE",
         type=float,
         default=20.0,
-        help="Special Distance2 by km and corlor with the special_color2",
+        help="Special Distance2 by km and color with the special_color2",
+    )
+    args_parser.add_argument(
+        "--special-distance3",
+        dest="special_distance3",
+        metavar="DISTANCE",
+        type=float,
+        default=40.0,
+        help="Special Distance3 by km and color with the special_color3",
+    )
+    args_parser.add_argument(
+        "--special-distance4",
+        dest="special_distance4",
+        metavar="DISTANCE",
+        type=float,
+        default=80.0,
+        help="Special Distance4 by km and color with the special_color4",
     )
     args_parser.add_argument(
         "--min-distance",
@@ -255,6 +283,8 @@ def main():
     p.special_distance = {
         "special_distance": args.special_distance,
         "special_distance2": args.special_distance2,
+        "special_distance3": args.special_distance3,
+        "special_distance4": args.special_distance4,
     }
 
     p.colors = {
@@ -263,6 +293,8 @@ def main():
         "track2": args.track_color2 or args.track_color,
         "special": args.special_color,
         "special2": args.special_color2 or args.special_color,
+        "special3": args.special_color3 or args.special_color,
+        "special4": args.special_color4 or args.special_color,
         "text": args.text_color,
     }
     p.units = args.units
