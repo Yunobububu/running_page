@@ -123,26 +123,29 @@ def main():
         "--special-color",
         dest="special_color",
         metavar="COLOR",
-        default="#FFFF00",
-        help='Special track color (default: "#FFFF00").',
+        default="#4DD2FF",
+        help='Special track color (default: "#4DD2FF" blue for 5km).',
     )
     args_parser.add_argument(
         "--special-color2",
         dest="special_color2",
         metavar="COLOR",
-        help="Secondary color of special tracks (default: none).",
+        default="#FFFF00",
+        help="Secondary color of special tracks (default: "#FFFF00" yellow for 10km).",
     )
     args_parser.add_argument(
         "--special-color3",
         dest="special_color3",
         metavar="COLOR",
-        help="Third tier special track color (default: none).",
+        default="#FF0000",
+        help="Third tier special track color (default: "#FF0000" red for 20km).",
     )
     args_parser.add_argument(
         "--special-color4",
         dest="special_color4",
         metavar="COLOR",
-        help="Fourth tier special track color (default: none).",
+        default="#800080",
+        help="Fourth tier special track color (default: "#800080" purple for 40km).",
     )
     args_parser.add_argument(
         "--units",
@@ -162,7 +165,7 @@ def main():
         dest="special_distance",
         metavar="DISTANCE",
         type=float,
-        default=10.0,
+        default=5.0,
         help="Special Distance1 by km and color with the special_color",
     )
     args_parser.add_argument(
@@ -170,7 +173,7 @@ def main():
         dest="special_distance2",
         metavar="DISTANCE",
         type=float,
-        default=20.0,
+        default=10.0,
         help="Special Distance2 by km and color with the special_color2",
     )
     args_parser.add_argument(
@@ -178,7 +181,7 @@ def main():
         dest="special_distance3",
         metavar="DISTANCE",
         type=float,
-        default=40.0,
+        default=20.0,
         help="Special Distance3 by km and color with the special_color3",
     )
     args_parser.add_argument(
@@ -186,7 +189,7 @@ def main():
         dest="special_distance4",
         metavar="DISTANCE",
         type=float,
-        default=80.0,
+        default=40.0,
         help="Special Distance4 by km and color with the special_color4",
     )
     args_parser.add_argument(

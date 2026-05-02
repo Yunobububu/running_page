@@ -57,10 +57,10 @@ class GridDrawer(TracksDrawer):
         date_title = f"{str(tr.start_time_local)[:10]} {str_length}{self.poster.u()}"
         tr_length = self.poster.m2u(tr.length)
 
-        distance1 = self.poster.special_distance.get("special_distance", 10.0)
-        distance2 = self.poster.special_distance.get("special_distance2", 20.0)
-        distance3 = self.poster.special_distance.get("special_distance3", 40.0)
-        distance4 = self.poster.special_distance.get("special_distance4", 80.0)
+        distance1 = self.poster.special_distance.get("special_distance", 5.0)
+        distance2 = self.poster.special_distance.get("special_distance2", 10.0)
+        distance3 = self.poster.special_distance.get("special_distance3", 20.0)
+        distance4 = self.poster.special_distance.get("special_distance4", 40.0)
 
         for line in project(tr.bbox(), size, offset, tr.polylines):
             if tr_length >= distance4:

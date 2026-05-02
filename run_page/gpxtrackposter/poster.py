@@ -49,10 +49,10 @@ class Poster:
         self.colors = {
             "background": "#222222",
             "text": "#FFFFFF",
-            "special": "#FFFF00",
+            "special": "#4DD2FF",
             "track": "#4DD2FF",
         }
-        self.special_distance = {"special_distance": 10, "special_distance2": 20, "special_distance3": 40, "special_distance4": 80}
+        self.special_distance = {"special_distance": 5, "special_distance2": 10, "special_distance3": 20, "special_distance4": 40}
         self.width = 200
         self.height = 300
         self.years = None
@@ -160,8 +160,8 @@ class Poster:
 
         special_distance1 = self.special_distance["special_distance"]
         special_distance2 = self.special_distance["special_distance2"]
-        special_distance3 = self.special_distance.get("special_distance3", 40)
-        special_distance4 = self.special_distance.get("special_distance4", 80)
+        special_distance3 = self.special_distance.get("special_distance3", 20)
+        special_distance4 = self.special_distance.get("special_distance4", 40)
 
         (
             total_length,
@@ -197,27 +197,35 @@ class Poster:
                 )
             )
 
-            d.add(
-                d.rect((65, self.height - 17), (2.6, 2.6), fill=self.colors["special"])
-            )
+            # 2x2 grid layout: left column (distance 1,2) / right column (distance 3,4)
+            col_left_x = 65
+            col_right_x = 90
+            text_left_x = col_left_x + 5
+            text_right_x = col_right_x + 5
+            row1_y = self.height - 17
+            row1_text_y = self.height - 14.5
+            row2_y = self.height - 12
+            row2_text_y = self.height - 9.5
 
+            d.add(
+                d.rect((col_left_x, row1_y), (2.6, 2.6), fill=self.colors["special"])
+            )
             d.add(
                 d.text(
                     f"Over {special_distance1:.1f} {self.u()}",
-                    insert=(70, self.height - 14.5),
+                    insert=(text_left_x, row1_text_y),
                     fill=text_color,
                     style=small_value_style,
                 )
             )
 
             d.add(
-                d.rect((65, self.height - 13), (2.6, 2.6), fill=self.colors["special2"])
+                d.rect((col_left_x, row2_y), (2.6, 2.6), fill=self.colors["special2"])
             )
-
             d.add(
                 d.text(
                     f"Over {special_distance2:.1f} {self.u()}",
-                    insert=(70, self.height - 10.5),
+                    insert=(text_left_x, row2_text_y),
                     fill=text_color,
                     style=small_value_style,
                 )
@@ -225,16 +233,15 @@ class Poster:
 
             d.add(
                 d.rect(
-                    (65, self.height - 9),
+                    (col_right_x, row1_y),
                     (2.6, 2.6),
                     fill=self.colors.get("special3", self.colors["special"]),
                 )
             )
-
             d.add(
                 d.text(
                     f"Over {special_distance3:.1f} {self.u()}",
-                    insert=(70, self.height - 6.5),
+                    insert=(text_right_x, row1_text_y),
                     fill=text_color,
                     style=small_value_style,
                 )
@@ -242,16 +249,15 @@ class Poster:
 
             d.add(
                 d.rect(
-                    (65, self.height - 5),
+                    (col_right_x, row2_y),
                     (2.6, 2.6),
                     fill=self.colors.get("special4", self.colors["special"]),
                 )
             )
-
             d.add(
                 d.text(
                     f"Over {special_distance4:.1f} {self.u()}",
-                    insert=(70, self.height - 2.5),
+                    insert=(text_right_x, row2_text_y),
                     fill=text_color,
                     style=small_value_style,
                 )
