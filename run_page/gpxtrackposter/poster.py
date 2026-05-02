@@ -52,7 +52,7 @@ class Poster:
             "special": "#FFFF00",
             "track": "#4DD2FF",
         }
-        self.special_distance = {"special_distance": 10, "special_distance2": 20}
+        self.special_distance = {"special_distance": 10, "special_distance2": 20, "special_distance3": 40, "special_distance4": 80}
         self.width = 200
         self.height = 300
         self.years = None
@@ -160,6 +160,8 @@ class Poster:
 
         special_distance1 = self.special_distance["special_distance"]
         special_distance2 = self.special_distance["special_distance2"]
+        special_distance3 = self.special_distance.get("special_distance3", 40)
+        special_distance4 = self.special_distance.get("special_distance4", 80)
 
         (
             total_length,
@@ -216,6 +218,40 @@ class Poster:
                 d.text(
                     f"Over {special_distance2:.1f} {self.u()}",
                     insert=(70, self.height - 10.5),
+                    fill=text_color,
+                    style=small_value_style,
+                )
+            )
+
+            d.add(
+                d.rect(
+                    (65, self.height - 9),
+                    (2.6, 2.6),
+                    fill=self.colors.get("special3", self.colors["special"]),
+                )
+            )
+
+            d.add(
+                d.text(
+                    f"Over {special_distance3:.1f} {self.u()}",
+                    insert=(70, self.height - 6.5),
+                    fill=text_color,
+                    style=small_value_style,
+                )
+            )
+
+            d.add(
+                d.rect(
+                    (65, self.height - 5),
+                    (2.6, 2.6),
+                    fill=self.colors.get("special4", self.colors["special"]),
+                )
+            )
+
+            d.add(
+                d.text(
+                    f"Over {special_distance4:.1f} {self.u()}",
+                    insert=(70, self.height - 2.5),
                     fill=text_color,
                     style=small_value_style,
                 )
