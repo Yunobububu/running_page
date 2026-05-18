@@ -155,16 +155,39 @@ class GithubDrawer(TracksDrawer):
                     if date_title in self.poster.tracks_by_date:
                         tracks = self.poster.tracks_by_date[date_title]
                         length = sum([t.length for t in tracks])
-                        distance1 = self.poster.special_distance["special_distance"]
-                        distance2 = self.poster.special_distance["special_distance2"]
-                        has_special = distance1 < self.poster.m2u(length) < distance2
-                        color = self.color(
-                            self.poster.length_range_by_date, length, has_special
-                        )
-                        if self.poster.m2u(length) >= distance2:
-                            color = self.poster.colors.get(
-                                "special2"
-                            ) or self.poster.colors.get("special")
+                        distance1 = self.poster.special_distance.get("special_distance", 10.0)
+                        distance2 = self.poster.special_distance.get("special_distance2", 20.0)
+                        distance3 = self.poster.special_distance.get("special_distance3", 40.0)
+                        distance4 = self.poster.special_distance.get("special_distance4", 999.0)
+                        length_km = self.poster.m2u(length)
+
+                        if length_km >= distance4:
+                            color = (
+                                self.poster.colors.get("special4")
+                                or self.poster.colors.get("special3")
+                                or self.poster.colors.get("special2")
+                                or self.poster.colors.get("special")
+                            )
+                        elif length_km >= distance3:
+                            color = (
+                                self.poster.colors.get("special3")
+                                or self.poster.colors.get("special2")
+                                or self.poster.colors.get("special")
+                            )
+                        elif length_km >= distance2:
+                            color = (
+                                self.poster.colors.get("special2")
+                                or self.poster.colors.get("special")
+                            )
+                        elif length_km >= distance1:
+                            color = (
+                                self.poster.colors.get("special")
+                                or self.poster.colors["track"]
+                            )
+                        else:
+                            color = self.color(
+                                self.poster.length_range_by_date, length, False
+                            )
                         str_length = format_float(self.poster.m2u(length))
                         date_title = f"{date_title} {str_length} {self.poster.u()}"
 
