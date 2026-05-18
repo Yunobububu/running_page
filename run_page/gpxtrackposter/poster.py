@@ -52,7 +52,7 @@ class Poster:
             "special": "#4DD2FF",
             "track": "#4DD2FF",
         }
-        self.special_distance = {"special_distance": 10, "special_distance2": 20, "special_distance3": 40, "special_distance4": 999}
+        self.special_distance = {"special_distance": 5, "special_distance2": 10, "special_distance3": 20, "special_distance4": 40}
         self.width = 200
         self.height = 300
         self.years = None
